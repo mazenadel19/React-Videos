@@ -23,7 +23,7 @@ export default class Searchbar extends Component {
 						<input
 							type='text'
 							id='videoSearch'
-							placeholder='type something here...'
+							placeholder='type something here and hit enter...'
 							value={this.state.term}
 							onChange={this.onInputChange}
 						/>
