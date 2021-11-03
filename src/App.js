@@ -1,53 +1,76 @@
-import React, { Component } from 'react';
-import Searchbar from './components/Searchbar';
-import youtube from './apis/youtube';
-import VideoList from './components/VideoList';
-import { VideoDetail } from './components/VideoDetail';
+import React, { useEffect, useState } from 'react'
+import Searchbar from './components/Searchbar'
+import { VideoDetail } from './components/VideoDetail'
+import VideoList from './components/VideoList'
+import youtube from './apis/youtube'
 
-export default class App extends Component {
-	state = {
+// 	state = {
+// 		videos: [],
+// 		selectedVideo: null,
+// 	};
+
+// 	componentDidMount(){
+// 		this.onTermSubmit('Reactjs')
+// 	}
+
+// 	onTermSubmit = async term => {
+// 		console.log(term);
+// 		const res = await youtube.get('/search', {
+// 			params: {
+// 				q: term,
+// 			},
+// 		});
+// 		console.log(res.data.items);
+// 		this.setState({ videos: res.data.items, selectedVideo: res.data.items[0] });
+// 	};
+
+// 	onVideoSelect = video => {
+// 		this.setState({ selectedVideo: video });
+// 	};
+
+const App = () => {
+	const [videoState, setVideoState] = useState({
 		videos: [],
 		selectedVideo: null,
-	};
+	})
 
-	componentDidMount(){
-		this.onTermSubmit('Reactjs')
-	}
+	useEffect(() => {
+		onTermSubmit('Reactjs')
+	}, [])
 
-	onTermSubmit = async term => {
-		console.log(term);
+	const onTermSubmit = async term => {
+		console.log(term)
 		const res = await youtube.get('/search', {
 			params: {
 				q: term,
 			},
-		});
-		console.log(res.data.items);
-		this.setState({ videos: res.data.items, selectedVideo: res.data.items[0] });
-	};
+		})
+		console.log(res.data.items)
+		setVideoState({ videos: res.data.items, selectedVideo: res.data.items[0] })
+	}
 
-	onVideoSelect = video => {
-		this.setState({ selectedVideo: video });
-	};
+	const onVideoSelect = video => {
+		setVideoState({ videos: videoState.videos, selectedVideo: video })
+	}
+	return (
+		<div className='ui container'>
+			<Searchbar onFormSubmit={onTermSubmit} />
+			<div className='ui grid'>
+				<div className='ui row'>
+					<div className='eleven wide column'>
+						<VideoDetail video={videoState.selectedVideo} />
+					</div>
 
-	render() {
-		return (
-			<div className='ui container'>
-				<Searchbar onFormSubmit={this.onTermSubmit} />
-				<div className='ui grid'>
-					<div className='ui row'>
-						<div className='eleven wide column'>
-							<VideoDetail video={this.state.selectedVideo} />
-						</div>
-
-						<div className='five wide column'>
-							<VideoList
-								videos={this.state.videos}
-								onVideoSelect={this.onVideoSelect}
-							/>
-						</div>
+					<div className='five wide column'>
+						<VideoList
+							videos={videoState.videos}
+							onVideoSelect={onVideoSelect}
+						/>
 					</div>
 				</div>
 			</div>
-		);
-	}
+		</div>
+	)
 }
+
+export default App
