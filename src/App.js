@@ -1,38 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import youtube from './apis/youtube'
 import Searchbar from './components/Searchbar'
 import { VideoDetail } from './components/VideoDetail'
 import VideoList from './components/VideoList'
-import youtube from './apis/youtube'
-
-// 	state = {
-// 		videos: [],
-// 		selectedVideo: null,
-// 	};
-
-// 	componentDidMount(){
-// 		this.onTermSubmit('Reactjs')
-// 	}
-
-// 	onTermSubmit = async term => {
-// 		console.log(term);
-// 		const res = await youtube.get('/search', {
-// 			params: {
-// 				q: term,
-// 			},
-// 		});
-// 		console.log(res.data.items);
-// 		this.setState({ videos: res.data.items, selectedVideo: res.data.items[0] });
-// 	};
-
-// 	onVideoSelect = video => {
-// 		this.setState({ selectedVideo: video });
-// 	};
 
 const App = () => {
-	const [videoState, setVideoState] = useState({
-		videos: [],
-		selectedVideo: null,
-	})
+	const [videos, setVideos] = useState([])
+	const [selectedVideo, setSelectedVideo] = useState(null)
 
 	useEffect(() => {
 		onTermSubmit('Reactjs')
@@ -45,27 +19,30 @@ const App = () => {
 				q: term,
 			},
 		})
-		console.log(res.data.items)
-		setVideoState({ videos: res.data.items, selectedVideo: res.data.items[0] })
+		setVideos(res.data.items)
+		setSelectedVideo(res.data.items[0])
 	}
 
-	const onVideoSelect = video => {
-		setVideoState({ videos: videoState.videos, selectedVideo: video })
-	}
+	// const onVideoSelect = video => {
+	// 	setSelectedVideo(video)
+	// }
+	/*
+	notice this pattern when u get an argument and pass that same argument to a function
+	...
+	 instead of  making a function to update state and passing it as a parameter,
+	 we can pass the setstate(setSelectedVideo) function as a parameter to component and have it update the state from the child component
+	*/
 	return (
 		<div className='ui container'>
 			<Searchbar onFormSubmit={onTermSubmit} />
 			<div className='ui grid'>
 				<div className='ui row'>
 					<div className='eleven wide column'>
-						<VideoDetail video={videoState.selectedVideo} />
+						<VideoDetail video={selectedVideo} />
 					</div>
 
 					<div className='five wide column'>
-						<VideoList
-							videos={videoState.videos}
-							onVideoSelect={onVideoSelect}
-						/>
+						<VideoList videos={videos} onVideoSelect={setSelectedVideo} />
 					</div>
 				</div>
 			</div>
