@@ -1,5 +1,5 @@
-import React from 'react';
-import './VideoItem.css';
+import React from 'react'
+import './VideoItem.css'
 
 export default function VideoItem({ video, onVideoSelect }) {
 	return (
@@ -14,5 +14,5 @@ export default function VideoItem({ video, onVideoSelect }) {
 				<div className='header'>{video.snippet.title}</div>
 			</div>
 		</div>
-	);
+	)
 }

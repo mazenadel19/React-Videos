@@ -1,53 +1,44 @@
-import React, { Component } from 'react';
-import Searchbar from './components/Searchbar';
-import youtube from './apis/youtube';
-import VideoList from './components/VideoList';
-import { VideoDetail } from './components/VideoDetail';
+import React, { useEffect, useState } from 'react'
+import Searchbar from './components/Searchbar'
+import { VideoDetail } from './components/VideoDetail'
+import VideoList from './components/VideoList'
+import useVideos from './hooks/useVideos'
 
-export default class App extends Component {
-	state = {
-		videos: [],
-		selectedVideo: null,
-	};
+const defaultTerm = 'React JS'
 
-	componentDidMount(){
-		this.onTermSubmit('Reactjs')
-	}
+const App = () => {
+	const [videos, search] = useVideos(defaultTerm)
+	const [selectedVideo, setSelectedVideo] = useState(null)
 
-	onTermSubmit = async term => {
-		console.log(term);
-		const res = await youtube.get('/search', {
-			params: {
-				q: term,
-			},
-		});
-		console.log(res.data.items);
-		this.setState({ videos: res.data.items, selectedVideo: res.data.items[0] });
-	};
+	useEffect(() => {
+		setSelectedVideo(videos[0])
+	}, [videos])
 
-	onVideoSelect = video => {
-		this.setState({ selectedVideo: video });
-	};
+	// const onVideoSelect = video => {
+	// 	setSelectedVideo(video)
+	// }
+	/*
+	notice this pattern when u get an argument and pass that same argument to a function
+	...
+	 instead of  making a function to update state and passing it as a parameter,
+	 we can pass the setstate(setSelectedVideo) function as a parameter to component and have it update the state from the child component
+	*/
+	return (
+		<div className='ui container'>
+			<Searchbar defaultTerm={defaultTerm} onFormSubmit={search} />
+			<div className='ui grid'>
+				<div className='ui row'>
+					<div className='eleven wide column'>
+						<VideoDetail video={selectedVideo} />
+					</div>
 
-	render() {
-		return (
-			<div className='ui container'>
-				<Searchbar onFormSubmit={this.onTermSubmit} />
-				<div className='ui grid'>
-					<div className='ui row'>
-						<div className='eleven wide column'>
-							<VideoDetail video={this.state.selectedVideo} />
-						</div>
-
-						<div className='five wide column'>
-							<VideoList
-								videos={this.state.videos}
-								onVideoSelect={this.onVideoSelect}
-							/>
-						</div>
+					<div className='five wide column'>
+						<VideoList videos={videos} onVideoSelect={setSelectedVideo} />
 					</div>
 				</div>
 			</div>
-		);
-	}
+		</div>
+	)
 }
+
+export default App
