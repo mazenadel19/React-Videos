@@ -19,6 +19,7 @@ const App = () => {
 				q: term,
 			},
 		})
+		console.log(res)
 		setVideos(res.data.items)
 		setSelectedVideo(res.data.items[0])
 	}

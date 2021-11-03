@@ -1,7 +1,7 @@
 # React Videos
 
-main: https://confident-kowalevski-d7b568.netlify.app/
-refactored with hooks: https://condescending-wozniak-a174e7.netlify.app/
+- main: https://confident-kowalevski-d7b568.netlify.app/
+- refactored with hooks: https://condescending-wozniak-a174e7.netlify.app/
 
 ## 🚀 Getting Started
 
