@@ -3,8 +3,8 @@
 
 - open terminal
 - git clone `https://github.com/mazenadel19/react-videos.git`
-- `npm i`
 - cd react-pics
+- `npm i`
 - `npm start` or `yarn start`
 
 ## 🧰 Tools I've used
